@@ -2,6 +2,7 @@
 
 Hi! This is a guide on how to install macOS on your MSI GS65. I will specifically show how to install on an MSI with Coffeelake series chipset, eg. 8750H, but if any other MSI owners have issues with their hack feel free to create an issue for any help.
 
+
 # Table of Contexts
 - [MSI GS65 8SE Hackintosh Guide](#msi-gs65-8se-hackintosh-guide)
 - [Table of Contexts](#table-of-contexts)
@@ -234,7 +235,7 @@ Fortunately I have fixes for these issues:
   * Select your efi drive and mount it.
 
 ### Keyboard Brightness keys fix
-* Download SSDT-KEYS.aml
+* Download [SSDT-KEYS.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-KEYS.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Restart system and you should have key brightness fixed.
 
@@ -255,24 +256,24 @@ Fortunately I have fixes for these issues:
         Replace: 45435F5F
         ```
   *   Click on Device -> Properties -> PciRoot(0)/Pci(0x1f,3) and on the properties key add "layout-id". Make sure that value type is on Number. 
-  *   If you have audio codec ALC1220, in the "property value type "34". If you have another audio codec, see the supported layout values [here](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs)
+  *   If you have audio codec ALC1220, in the "property value type "34" without quotation marks. If you have another audio codec, see the supported layout values [here](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs)
   *   Save the config.plist and restart your mac. 
   *   Once it's booted up go to system preferences->sound->output and select "internal speakers" and you should have audio fixed. 
 
 ### Backlight Fix
-*   Download SSDT-PNLF-Coffeelake.aml
+*   Download [SSDT-PNLF-Coffeelake.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-PNLF_CoffeeLake.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Open config.plist and go to ACPI->DSDT->List-of=patches and click on `change gfx0 to igpu` 
 *  Save and restart system and you should have brightness fix.
 
 
 ### Disable the Nvidia GPU
-* Download SSDT-DDGPU.aml
+* Download [SSDT-DDGPU.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-DDGPU.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Restart system and you should have your gpu turned off (white light only shows in power button now).
 
 ### Fix Sleep and DDGPU turning back on
-* Download SSDT-PTSWAK.aml and SSDT-RMCF.aml
+* Download [SSDT-PTSWAK.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-PTSWAK.aml?raw=true) and [SSDT-RMCF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-RMCF.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Open config.plist and go to ACPI->DSDT->patches and add the 2 patches
     ```
@@ -287,7 +288,7 @@ Fortunately I have fixes for these issues:
 *   Save and restart system and you should have sleep issue working fine and dgpu will not turn on after wake.
 
 ### USBInjectAll Improvement
-* Download SSDT-UIAC.aml and SSDT-XOSI.aml
+* Download [SSDT-UIAC.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-UIAC.aml?raw=true) and [SSDT-XOSI.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-XOSI.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 * Open config.plist with Clover Configurator, and press ACPI->DSDT and add the folllowing patch: 
     ```
@@ -317,3 +318,5 @@ If you have any issues or question about your installation or you're coming from
 Also if there is any issues with any of the installation steps that I provided or if you'd like to contribute feel free to do so. 
 
 Thanks to Rehabman, acidanthera, and may other people for allowing hackintosh to be possible.
+
+**will try to make it more universal soon.**
