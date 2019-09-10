@@ -40,14 +40,15 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
 * Thunderbolt 3.0 Type C
 
 # Issues That Can't Be Fixed (as of now)
-* RTX 2060 (apple does not support optimus/nvidia on Mojave)
+* RTX 2060 (Apple does not support optimus/nvidia on Mojave)
 * HDMI and miniDP (atleast on my computer, they seem to be routed to the 2060)
 * Stock WiFi card does not work.
 
 # Issues I Currently Have (that could possibly be fixed)
-* No sound after sleep (on ALC1220)
+* <s>No sound after sleep (on ALC1220)</s> (Issue is fixed. Needed to install wake verbs on layout-id 34. Currently only available in my compiled AppleALC since it's not merged in AppleALC as of 9-9-2019)
 * Backlight does not save after restarting (probably because of emulated NVRAM)
-* SteelSeries color change (there is no software to control per-key rgb on macOS) 
+* SteelSeries color change (there is no software to control per-key rgb on macOS)
+* Random black scren before loading. This eventually happens, and if it does happen just wait about 3 minutes and the log in screen will load. More info [here.](https://www.tonymacx86.com/threads/bug-black-screen-3-minutes-after-booting-coffeelake-uhd-630.261131/)
 
 # Requirements
 * 8GB USB Drive
@@ -171,7 +172,9 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
       * [AirportBrcmFixp](https://github.com/acidanthera/AirportBrcmFixup/releases "AirportBrcmFixup") (WiFi Fix for BCM94352Z)
 
     * Next you will need to install a custom config.plist from Rehabman's config.plist [repository](https://github.com/RehabMan/OS-X-Clover-Laptop-Config) and selecting the right graphics hardware configuration. Or if you know you have a UHD 630 then you can also use my config.plist. More info [here](https://www.tonymacx86.com/threads/guide-booting-the-os-x-installer-on-laptops-with-clover.148093/)
+  
     * After you selected your clover file, copy the file and paste it in EFI/Clover. ***Make sure the file is renamed to config.plist or else clover will not accept the file.***
+
     * If you got the config file from somewhere else other than the one I provided, then you need to open the config.plist and go to ACPI-> DSDT ->Patches and add the RTC bug fix (applies only to coffeelake)
         ```
 	    <dict>
@@ -235,25 +238,19 @@ Fortunately I have fixes for these issues:
   * Select your efi drive and mount it.
 
 ### Keyboard Brightness keys fix
-* Download [SSDT-KEYS.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-KEYS.aml?raw=true)
+* Download [SSDT-KEYS.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-KEYS.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Restart system and you should have key brightness fixed.
 
 
 ### Audio Fix
-  *   Download [AppleALC](https://github.com/acidanthera/AppleALC/releases "AppleALC")
+  *   Download AppleALC from my repository (since the patch is still not in Acidanthera's AppleALC)
   *   Install AppleALC.kext to /EFI/Clover/kext/other
   *   After moving to the right location, go back to /EFI/Clover and right click on config.plist and open with Clover Configurator.
-  *   First go to ACPI->DSDT-> List of patches and click on:
+  *   Go to ACPI->DSDT-> List of patches and click on:
         ```
         HECI to IMEI
         HDAS to HDEF
-        ```
-        and add this patch to DSDT patches:
-        ```
-        change Method(_PTS,1,N) to ZPTS, pair with SSDT-PTSWAK.aml
-        Find: 485F4543
-        Replace: 45435F5F
         ```
   *   Click on Device -> Properties -> PciRoot(0)/Pci(0x1f,3) and on the properties key add "layout-id". Make sure that value type is on Number. 
   *   If you have audio codec ALC1220, in the "property value type "34" without quotation marks. If you have another audio codec, see the supported layout values [here](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs)
@@ -261,19 +258,19 @@ Fortunately I have fixes for these issues:
   *   Once it's booted up go to system preferences->sound->output and select "internal speakers" and you should have audio fixed. 
 
 ### Backlight Fix
-*   Download [SSDT-PNLF-Coffeelake.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-PNLF_CoffeeLake.aml?raw=true)
+*   Download [SSDT-PNLF-Coffeelake.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PNLF_CoffeeLake.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Open config.plist and go to ACPI->DSDT->List-of=patches and click on `change gfx0 to igpu` 
 *  Save and restart system and you should have brightness fix.
 
 
 ### Disable the Nvidia GPU
-* Download [SSDT-DDGPU.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-DDGPU.aml?raw=true)
+* Download [SSDT-DDGPU.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-DDGPU.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Restart system and you should have your gpu turned off (white light only shows in power button now).
 
 ### Fix Sleep and DDGPU turning back on
-* Download [SSDT-PTSWAK.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-PTSWAK.aml?raw=true) and [SSDT-RMCF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-RMCF.aml?raw=true)
+* Download [SSDT-PTSWAK.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PTSWAK.aml?raw=true) and [SSDT-RMCF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-RMCF.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Open config.plist and go to ACPI->DSDT->patches and add the 2 patches
     ```
@@ -288,7 +285,7 @@ Fortunately I have fixes for these issues:
 *   Save and restart system and you should have sleep issue working fine and dgpu will not turn on after wake.
 
 ### USBInjectAll Improvement
-* Download [SSDT-UIAC.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-UIAC.aml?raw=true) and [SSDT-XOSI.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/EFI/CLOVER/ACPI/patched/SSDT-XOSI.aml?raw=true)
+* Download [SSDT-UIAC.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-UIAC.aml?raw=true) and [SSDT-XOSI.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-XOSI.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 * Open config.plist with Clover Configurator, and press ACPI->DSDT and add the folllowing patch: 
     ```
