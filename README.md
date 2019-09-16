@@ -20,7 +20,7 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
     - [Audio Fix](#audio-fix)
     - [Backlight Fix](#backlight-fix)
     - [Disable the Nvidia GPU](#disable-the-nvidia-gpu)
-    - [Fix Sleep and DDGPU turning back on](#fix-sleep-and-ddgpu-turning-back-on)
+    - [Fix Sleep and prevent DDGPU turning back on after sleep](#fix-sleep-and-prevent-ddgpu-turning-back-on-after-sleep)
     - [USBInjectAll Improvement](#usbinjectall-improvement)
     - [Battery Status](#battery-status)
     - [Bluetooth fix](#bluetooth-fix)
@@ -247,29 +247,22 @@ Fortunately I have fixes for these issues:
   *   Download AppleALC from my repository (since the patch is still not in Acidanthera's AppleALC)
   *   Install AppleALC.kext to /EFI/Clover/kext/other
   *   After moving to the right location, go back to /EFI/Clover and right click on config.plist and open with Clover Configurator.
-  *   Go to ACPI->DSDT-> List of patches and click on:
-        ```
-        HECI to IMEI
-        HDAS to HDEF
-        ```
   *   Click on Device -> Properties -> PciRoot(0)/Pci(0x1f,3) and on the properties key add "layout-id". Make sure that value type is on Number. 
   *   If you have audio codec ALC1220, in the "property value type "34" without quotation marks. If you have another audio codec, see the supported layout values [here](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs)
   *   Save the config.plist and restart your mac. 
   *   Once it's booted up go to system preferences->sound->output and select "internal speakers" and you should have audio fixed. 
 
 ### Backlight Fix
-*   Download [SSDT-PNLF-Coffeelake.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PNLF_CoffeeLake.aml?raw=true)
+*   Download [SSDT-PNLF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PNLF.aml?raw=true).
 *   Place it in /EFI/Clover/ACPI/patched/
-*   Open config.plist and go to ACPI->DSDT->List-of=patches and click on `change gfx0 to igpu` 
 *  Save and restart system and you should have brightness fix.
-
 
 ### Disable the Nvidia GPU
 * Download [SSDT-DDGPU.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-DDGPU.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Restart system and you should have your gpu turned off (white light only shows in power button now).
 
-### Fix Sleep and DDGPU turning back on
+### Fix Sleep and prevent DDGPU turning back on after sleep
 * Download [SSDT-PTSWAK.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PTSWAK.aml?raw=true) and [SSDT-RMCF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-RMCF.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
 *   Open config.plist and go to ACPI->DSDT->patches and add the 2 patches
