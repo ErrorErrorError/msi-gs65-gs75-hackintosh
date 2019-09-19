@@ -21,7 +21,7 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
     - [Backlight Fix](#backlight-fix)
     - [Disable the Nvidia GPU](#disable-the-nvidia-gpu)
     - [Fix Sleep and prevent DDGPU turning back on after sleep](#fix-sleep-and-prevent-ddgpu-turning-back-on-after-sleep)
-    - [USBInjectAll Improvement](#usbinjectall-improvement)
+    - [USB Ports Improvement and USB Properties](#usb-ports-improvement-and-usb-properties)
     - [Battery Status](#battery-status)
     - [Bluetooth fix](#bluetooth-fix)
     - [Multi-Gesture touchpad support](#multi-gesture-touchpad-support)
@@ -233,9 +233,18 @@ There are still a few issues that need to be fixed. For instance:
 Fortunately I have fixes for these issues:
 
 ### Mounting EFI Partition 
-  * Install [Clover Configurator](https://mackie100projects.altervista.org/download-clover-configurator/). This actually provides a GUI for editing the clover.plist which we will be using.
-  * After it's installed, open the app and click on mount EFI. 
-  * Select your efi drive and mount it.
+  * Open Terminal and type 
+    ```
+    ~
+    ➜ diskutil list
+    ```
+  * Get the disk destination of the EFI. Once you found it, type
+    ```
+    // Replace X and Y with the correct number where the EFI is located
+    ~
+    ➜ sudo diskutil mount /dev/diskXsY
+    ```
+  * You should be able to access your EFI folder.
 
 ### Keyboard Brightness keys fix
 * Download [SSDT-KEYS.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-KEYS.aml?raw=true)
@@ -246,8 +255,8 @@ Fortunately I have fixes for these issues:
 ### Audio Fix
   *   Download AppleALC from my repository (since the patch is still not in Acidanthera's AppleALC)
   *   Install AppleALC.kext to /EFI/Clover/kext/other
-  *   After moving to the right location, go back to /EFI/Clover and right click on config.plist and open with Clover Configurator.
-  *   Click on Device -> Properties -> PciRoot(0)/Pci(0x1f,3) and on the properties key add "layout-id". Make sure that value type is on Number. 
+  *   After moving to the right location, go back to /EFI/Clover and open config.plist.
+  *   Navigate to Device -> Properties -> PciRoot(0)/Pci(0x1f,3) and on add add "layout-id". Make sure that value type is on Number. 
   *   If you have audio codec ALC1220, in the "property value type "34" without quotation marks. If you have another audio codec, see the supported layout values [here](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs)
   *   Save the config.plist and restart your mac. 
   *   Once it's booted up go to system preferences->sound->output and select "internal speakers" and you should have audio fixed. 
@@ -265,28 +274,49 @@ Fortunately I have fixes for these issues:
 ### Fix Sleep and prevent DDGPU turning back on after sleep
 * Download [SSDT-PTSWAK.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-PTSWAK.aml?raw=true) and [SSDT-RMCF.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-RMCF.aml?raw=true)
 *   Place it in /EFI/Clover/ACPI/patched/
-*   Open config.plist and go to ACPI->DSDT->patches and add the 2 patches
+*   Open config.plist and go to ACPI->DSDT->patches and add the following 2 patches:
     ```
-    change Method(_PTS,1,N) to ZPTS, pair with SSDT-PTSWAK.aml
-    Find: 5F505453 01
-    Replace: 5A505453 01
+    <dict>
+      <key>Comment</key>
+      <string>change Method(_PTS,1,N) to ZPTS, pair with SSDT-PTSWAK.aml</string>
+      <key>Disabled</key>
+      <false/>
+      <key>Find</key>
+      <data>X1BUUwE=</data>
+      <key>Replace</key>
+      <data>WlBUUwE=</data>
+    </dict>
 
-    change Method(_WAK,1,N) to ZWAK, pair with SSDT-PTSWAK.aml
-    Find: 5F57414B 01
-    Replace: 5A57414B 01
+    <dict>
+      <key>Comment</key>
+      <string>change Method(_WAK,1,N) to ZWAK, pair with SSDT-PTSWAK.aml</string>
+      <key>Disabled</key>
+      <false/>
+      <key>Find</key>
+      <data>X1dBSwE=</data>
+      <key>Replace</key>
+      <data>WldBSwE=</data>
+    </dict>
     ```
 *   Save and restart system and you should have sleep issue working fine and dgpu will not turn on after wake.
 
-### USBInjectAll Improvement
-* Download [SSDT-UIAC.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-UIAC.aml?raw=true) and [SSDT-XOSI.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-XOSI.aml?raw=true)
-*   Place it in /EFI/Clover/ACPI/patched/
-* Open config.plist with Clover Configurator, and press ACPI->DSDT and add the folllowing patch: 
+### USB  Ports Improvement and USB  Properties
+* Remove USBInjectAll.kext and download USBPorts.kext from my repository and download [SSDT-XOSI.aml](https://github.com/ErrorErrorError/msi-gs65-8SE-hackintosh/blob/master/ACPI/patched/SSDT-XOSI.aml?raw=true)
+*   Place USBPorts.kext in /EFI/Clover/kexts/Other/ and place SSDT-XOSI.aml in /EFI/Clover/ACPI/patched/
+* Open config.plist with Xcode and go to ACPI->DSDT->Patches and add the folllowing patch: 
     ```
-    change _OSI to XOSI
-    Find: 5F4F5349
-    Replace: 584F5349
+    <dict>
+      <key>Comment</key>
+      <string>change _OSI to XOSI</string>
+      <key>Disabled</key>
+      <false/>
+      <key>Find</key>
+      <data>X09TSQ==</data>
+      <key>Replace</key>
+      <data>WE9TSQ==</data>
+    </dict>
     ```
-* Save and restart system and you should have proper USB in.jection with correct USB power, assuming that you are using SMBios Macbook15,2.
+* Save and restart system and you should have proper USB injection with correct USB power, assuming that you are using SMBios Macbook15,2.
 
 ### Battery Status
 * Download and grab [SMCBatteryManager.kext](https://github.com/acidanthera/VirtualSMC/releases) from the VirtualSMC folder.
