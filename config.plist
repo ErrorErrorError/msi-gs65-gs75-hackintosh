@@ -103,6 +103,18 @@
 					<key>Replace</key>
 					<data>WldBSwE=</data>
 				</dict>
+				<dict>
+					<key>Comment</key>
+					<string>change _STA to XSTA, for VoodooI2C</string>
+					<key>Disabled</key>
+					<false/>
+					<key>Find</key>
+					<data>X1NUQQ==</data>
+					<key>Replace</key>
+					<data>WFNUQQ==</data>
+					<key>TgtBridge</key>
+					<data>R1BJMA==</data>
+				</dict>
 			</array>
 		</dict>
 		<key>DisableASPM</key>
@@ -175,7 +187,7 @@
 			<key>AFGLowPowerState</key>
 			<true/>
 			<key>Inject</key>
-			<integer>1</integer>
+			<string>NO</string>
 			<key>ResetHDA</key>
 			<true/>
 		</dict>
@@ -214,8 +226,12 @@
 				<integer>1</integer>
 				<key>#3 no external</key>
 				<string>0x3e9b0000, eliminate all external ports (0105 and 0204)</string>
+				<key>#AAPL,ig-platform-id</key>
+				<data>AACbPg==</data>
 				<key>#AAPL00,override-no-edid</key>
 				<data></data>
+				<key>#enable-cfl-backlight-fix </key>
+				<data>AQAAAA==</data>
 				<key>#framebuffer-con0-enable</key>
 				<integer>1</integer>
 				<key>#framebuffer-con0-type</key>
@@ -244,18 +260,22 @@
 				<data>EgAAAA==</data>
 				<key>#framebuffer-con3-type</key>
 				<data>AAgAAA==</data>
+				<key>#framebuffer-fbmem</key>
+				<data>AACQAA==</data>
+				<key>#framebuffer-patch-enable</key>
+				<integer>1</integer>
+				<key>#framebuffer-stolenmem</key>
+				<data>AAAwAQ==</data>
 				<key>#hda-gfx</key>
 				<string>onboard-1</string>
 				<key>AAPL,ig-platform-id</key>
-				<data>AACbPg==</data>
-				<key>enable-cfl-backlight-fix </key>
-				<data>AQAAAA==</data>
-				<key>framebuffer-fbmem</key>
-				<data>AACQAA==</data>
-				<key>framebuffer-patch-enable</key>
-				<integer>1</integer>
-				<key>framebuffer-stolenmem</key>
-				<data>AAAwAQ==</data>
+				<data>CQClPg==</data>
+				<key>AAPL,slot-name</key>
+				<string>Internal@0,2,0</string>
+				<key>device_type</key>
+				<string>VGA compatible controller</string>
+				<key>model</key>
+				<string>Intel UHD Graphics 630 (Mobile)</string>
 			</dict>
 			<key>PciRoot(0)/Pci(0x1f,3)</key>
 			<dict>
@@ -289,34 +309,6 @@
 	<dict>
 		<key>#ScreenResolution</key>
 		<string>1920x1080</string>
-		<key>Custom</key>
-		<dict>
-			<key>Entries</key>
-			<array>
-				<dict>
-					<key>Disabled</key>
-					<false/>
-					<key>Hidden</key>
-					<false/>
-					<key>Ignore</key>
-					<false/>
-					<key>NoCaches</key>
-					<false/>
-					<key>Type</key>
-					<string>OSXRecovery</string>
-				</dict>
-				<dict>
-					<key>Disabled</key>
-					<false/>
-					<key>Ignore</key>
-					<false/>
-					<key>Title</key>
-					<string>Windows</string>
-					<key>Type</key>
-					<string>Windows</string>
-				</dict>
-			</array>
-		</dict>
 		<key>Hide</key>
 		<array>
 			<string>Preboot</string>
@@ -384,30 +376,6 @@
 				<key>Replace</key>
 				<data>ILniAAAAkJA=</data>
 			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>Disable panic kext logging on 10.13 release kernel (credit vit9696)</string>
-				<key>Disabled</key>
-				<true/>
-				<key>Find</key>
-				<data>igKEwHRE</data>
-				<key>MatchOS</key>
-				<string>10.13.x</string>
-				<key>Replace</key>
-				<data>igKEwOtE</data>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>Disable panic kext logging on 10.14 release kernel (credit vit9696)</string>
-				<key>Disabled</key>
-				<true/>
-				<key>Find</key>
-				<data>igKEwHRC</data>
-				<key>MatchOS</key>
-				<string>10.14.x</string>
-				<key>Replace</key>
-				<data>igKEwOtC</data>
-			</dict>
 		</array>
 		<key>PanicNoKextDump</key>
 		<true/>
@@ -423,6 +391,8 @@
 	<dict>
 		<key>ProductName</key>
 		<string>MacBookPro15,2</string>
+		<key>Version</key>
+		<string>1.0</string>
 	</dict>
 	<key>SystemParameters</key>
 	<dict>

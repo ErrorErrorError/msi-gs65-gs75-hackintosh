@@ -2,17 +2,20 @@
 
 Hi! This is a guide on how to install macOS on your MSI GS65. I will specifically show how to install on an MSI with Coffeelake series chipset, eg. 8750H, but if any other MSI owners have issues with their hack feel free to create an issue for any help.
 
-
 # Table of Contexts
 - [MSI GS65 8SE Hackintosh Guide](#msi-gs65-8se-hackintosh-guide)
 - [Table of Contexts](#table-of-contexts)
 - [Hardware](#hardware)
 - [Issues That Can't Be Fixed (as of now)](#issues-that-cant-be-fixed-as-of-now)
 - [Issues I Currently Have (that could possibly be fixed)](#issues-i-currently-have-that-could-possibly-be-fixed)
+- [Upgrading from Mojave to Catalina](#upgrading-from-mojave-to-catalina)
 - [Requirements](#requirements)
 - [Pre-Installation](#pre-installation)
     - [Bios Menu Setup](#bios-menu-setup)
     - [USB Setup](#usb-setup)
+- [Building the installer:](#building-the-installer)
+    - [Mojave](#mojave)
+    - [Catalina](#catalina)
 - [Installation](#installation)
 - [Post-Installation](#post-installation)
     - [Mounting EFI Partition](#mounting-efi-partition)
@@ -24,6 +27,7 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
     - [USB Ports Improvement and USB Properties](#usb-ports-improvement-and-usb-properties)
     - [Battery Status](#battery-status)
     - [Bluetooth fix](#bluetooth-fix)
+    - [Mouse not Moving in Login Screen.](#mouse-not-moving-in-login-screen)
     - [Multi-Gesture touchpad support](#multi-gesture-touchpad-support)
 - [Troubleshooting](#troubleshooting)
 
@@ -45,10 +49,13 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
 * Stock WiFi card does not work.
 
 # Issues I Currently Have (that could possibly be fixed)
-* <s>No sound after sleep (on ALC1220)</s> (Issue is fixed. Needed to install wake verbs on layout-id 34. Currently only available in my compiled AppleALC since it's not merged in AppleALC as of 9-9-2019)
+* <s>No sound after sleep (on ALC1220)</s> This issue is fixed and pushed in the latest AppleALC repository.
 * Backlight does not save after restarting (probably because of emulated NVRAM)
-* SteelSeries color change (there is no software to control per-key rgb on macOS)
-* Random black scren before loading. This eventually happens, and if it does happen just wait about 3 minutes and the log in screen will load. More info [here.](https://www.tonymacx86.com/threads/bug-black-screen-3-minutes-after-booting-coffeelake-uhd-630.261131/)
+* <s>SteelSeries color change (there is no software to control per-key rgb on macOS)</s> I am developing the software. So far, only steady mode works.
+* <s>Random black scren before loading. This eventually happens, and if it does happen just wait about 3 minutes and the log in screen will load. More info [here.](https://www.tonymacx86.com/threads/bug-black-screen-3-minutes-after-booting-coffeelake-uhd-630.261131/)</s> Have not had this issue ever since updating to the latest WEG.
+
+# Upgrading from Mojave to Catalina
+ If you currently have Mojave on your MSI Laptop, make sure you have the latest Kexts installed and also make sure you have "rename H_EC to EC" in your config.plist ACPI->DSDT->Patches.
 
 # Requirements
 * 8GB USB Drive
@@ -193,17 +200,30 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
 	    </dict>               
         ```
 
-  * Building the installer:
-    * Download macOS Mojave. 
-    * Once that is finished, open Terminal and run: <br>
-      ```
-      sudo "/Applications/Install macOS Mojave.app/Contents/Resources/createinstallmedia" --volume  /Volumes/install_osx --nointeraction
-      ```
-    * Once it's finished copying the installer to the usb, rename the USB using Terminal:
-      ```
-      sudo diskutil rename "Install macOS Mojave" install_osx
-      ```
-    * After that's done, eject the USB and you're ready to install macOS.
+# Building the installer:
+### Mojave
+* Download macOS Mojave from the AppStore 
+* Once that is finished, open Terminal and run: <br>
+```
+sudo "/Applications/Install macOS Mojave.app/Contents/Resources/createinstallmedia" --volume  /Volumes/install_osx --nointeraction
+```
+* Once it's finished copying the installer to the usb, rename the USB using Terminal:
+```
+sudo diskutil rename "Install macOS Mojave" install_osx
+```
+* After that's done, eject the USB and you're ready to install macOS.
+
+### Catalina
+* Download macOS Catalina from the AppStore 
+* Once that is finished, open Terminal and run: <br>
+```
+sudo "/Applications/Install macOS Catalina.app/Contents/Resources/createinstallmedia" --volume  /Volumes/install_osx --nointeraction
+```
+* Once it's finished copying the installer to the usb, rename the USB using Terminal:
+```
+sudo diskutil rename "Install macOS Catalina" install_osx
+```
+* After that's done, eject the USB and you're ready to install macOS.
 
 # Installation
   * Plug in the usb to one of the USB ports and turn on the computer.
@@ -228,6 +248,7 @@ There are still a few issues that need to be fixed. For instance:
   * Bluetooth not working properly (if you have BCM94352Z WiFi card)
   * Sleep/Wake issues
   * Nvidia card running even though it's not supported (thus it wastes battery)
+  * Mouse freezes
 
 
 Fortunately I have fixes for these issues:
@@ -329,6 +350,10 @@ Fortunately I have fixes for these issues:
 * Once it's finished extracting, copy BrcmFirmwareRepo.kext and BrcmPatchRam2.kext to /EFI/CLOVER/kexts/other
 * Restart and you should have bluetooth working
 
+### Mouse not Moving in Login Screen.
+  * Download [NoTouchID.kext](https://github.com/al3xtjames/NoTouchID)
+  * Once it's finished downloading, place it in /EFI/Clover/kexts/other/
+  * Restart and your mouse will not freeze in Login screen or when you have to input password.
 ### Multi-Gesture touchpad support
 Coming soon...
 
