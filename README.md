@@ -2,6 +2,7 @@
 
 Hi! This is a guide on how to install macOS on your MSI GS65. I will specifically show how to install on an MSI with Coffeelake series chipset, eg. 8750H, but if any other MSI owners have issues with their hack feel free to create an issue for any help.
 
+**DONT JUST COPY THE EFI FOLDER SINCE I CANNOT GUARANTEE IF ITWILL WORK FOR YOUR SYSTEM. FOLLOW THE GUIDE AND IF YOU'RE HAVING TROUBLE USE MY EFI AS A GUIDE.**
 # Table of Contexts
 - [MSI GS65 8SE Hackintosh Guide](#msi-gs65-8se-hackintosh-guide)
 - [Table of Contexts](#table-of-contexts)
@@ -13,6 +14,7 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
 - [Pre-Installation](#pre-installation)
     - [Bios Menu Setup](#bios-menu-setup)
     - [USB Setup](#usb-setup)
+  - [Installing Clover](#installing-clover)
 - [Building the installer:](#building-the-installer)
     - [Mojave](#mojave)
     - [Catalina](#catalina)
@@ -27,7 +29,8 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
     - [USB Ports Improvement and USB Properties](#usb-ports-improvement-and-usb-properties)
     - [Battery Status](#battery-status)
     - [Bluetooth fix](#bluetooth-fix)
-    - [Mouse not Moving in Login Screen.](#mouse-not-moving-in-login-screen)
+    - [Computer loading when inputting password](#computer-loading-when-inputting-password)
+    - [Cannot control RGB Keyboard](#cannot-control-rgb-keyboard)
     - [Multi-Gesture touchpad support](#multi-gesture-touchpad-support)
 - [Troubleshooting](#troubleshooting)
 
@@ -49,10 +52,7 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
 * Stock WiFi card does not work.
 
 # Issues I Currently Have (that could possibly be fixed)
-* <s>No sound after sleep (on ALC1220)</s> This issue is fixed and pushed in the latest AppleALC repository.
 * Backlight does not save after restarting (probably because of emulated NVRAM)
-* <s>SteelSeries color change (there is no software to control per-key rgb on macOS)</s> I am developing the software. So far, only steady mode works.
-* <s>Random black scren before loading. This eventually happens, and if it does happen just wait about 3 minutes and the log in screen will load. More info [here.](https://www.tonymacx86.com/threads/bug-black-screen-3-minutes-after-booting-coffeelake-uhd-630.261131/)</s> Have not had this issue ever since updating to the latest WEG.
 
 # Upgrading from Mojave to Catalina
  If you currently have Mojave on your MSI Laptop, make sure you have the latest Kexts installed and also make sure you have "rename H_EC to EC" in your config.plist ACPI->DSDT->Patches.
@@ -149,22 +149,22 @@ Hi! This is a guide on how to install macOS on your MSI GS65. I will specificall
         1:                        EFI EFI                     209.7 MB   disk3s1
         2:                  Apple_HFS install_osx             7.7 GB     disk3s2
         ```
-  * Installing Clover:
-    * Download the Clover installer from sourceforge: http://sourceforge.net/projects/cloverefiboot/
+##  Installing Clover
+  * Download the latest Clover installer from sourceforge: http://sourceforge.net/projects/cloverefiboot/ (version 5070 or higher)
 
-    * Once you have the Clover installer, run it and make sure you select `change install location `  and select `install_osx`.
-    * From there, click on customize and select:
-      *  Clover for UEFI booting only
-      *  Install Clover in the ESP
-      *  UEFI Drivers 
-         *  Recommended drivers (select all in recommended drivers)
-         *  File system drivers
-            * APFSDriverLoader 
-            * VBoxHFS (Don't forget this or else we wont be able to see the installer)
-         * Memory fix drivers
-            * OsxAptioFixDrv (make sure you just have this selected in memory fix) 
-    * After that's done, click install.
-    * Now that the installation is finished, we still ned to configure the clover files.
+  * Once you have the Clover installer, run it and make sure you select `change install location `  and select `install_osx`.
+  * From there, click on customize and select:
+    *  Clover for UEFI booting only
+    *  Install Clover in the ESP
+    *  UEFI Drivers 
+       *  Recommended drivers (select all in recommended drivers)
+       *  File system drivers
+          * APFSDriverLoader 
+          * VBoxHFS (Don't forget this or else we wont be able to see the installer)
+        * Memory fix drivers
+          * OsxAptioFixDrv (make sure you just have this selected in memory fix) 
+  * After that's done, click install.
+  * Now that the installation is finished, we still ned to configure the clover files.
 
   * Preparing kexts and config.plist:
     * Remove all but "Others" folder in EFI/CLOVER/kexts/. We don't need the macOS versions.
@@ -248,7 +248,8 @@ There are still a few issues that need to be fixed. For instance:
   * Bluetooth not working properly (if you have BCM94352Z WiFi card)
   * Sleep/Wake issues
   * Nvidia card running even though it's not supported (thus it wastes battery)
-  * Mouse freezes
+  * Computer loading when inputting password
+  * Controlling RGB keyboard
 
 
 Fortunately I have fixes for these issues:
@@ -346,14 +347,24 @@ Fortunately I have fixes for these issues:
 
 ### Bluetooth fix
 * ***You must have BCM94352Z installed on your computer***
-* Download [BrcmPatchRam](https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads/)
-* Once it's finished extracting, copy BrcmFirmwareRepo.kext and BrcmPatchRam2.kext to /EFI/CLOVER/kexts/other
+* If you're on macOS Mojave:
+  * Download [BrcmPatchRam](https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads/)
+  * Once it's finished extracting, copy BrcmFirmwareData.kext and BrcmPatchRam2.kext to /EFI/CLOVER/kexts/other
+* Else if you're on macOS Catalina: 
+  * Either compile the latest build from [Acidanthera's BrcmPatchRam](https://github.com/acidanthera/BrcmPatchRAM) or download my repository.
+  * After building/downloading the necessary files, copy BrcmFirmwareData.kext, BrcmPatchRam3.kext, and BrcmBluetoothInjector and paste them to /EFI/Clover/kexts/other
 * Restart and you should have bluetooth working
 
-### Mouse not Moving in Login Screen.
+### Computer loading when inputting password
   * Download [NoTouchID.kext](https://github.com/al3xtjames/NoTouchID)
   * Once it's finished downloading, place it in /EFI/Clover/kexts/other/
   * Restart and your mouse will not freeze in Login screen or when you have to input password.
+
+### Cannot control RGB Keyboard
+Unfortunately SteelSeries did not create a driver to control RGB keyboard on macOS. Fortunately I was able to create a gui to change your rgb keyboard. It's still in development so be aware of bugs that you might encounter.
+
+The app is [SSKeyboardHue](https://github.com/ErrorErrorError/SSKeyboardHue). 
+
 ### Multi-Gesture touchpad support
 Coming soon...
 
