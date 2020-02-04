@@ -366,7 +366,13 @@ Unfortunately SteelSeries did not create a driver to control RGB keyboard on mac
 The app is [SSKeyboardHue](https://github.com/ErrorErrorError/SSKeyboardHue). 
 
 ### Multi-Gesture touchpad support
-Coming soon...
+Tested on High Sierra 10.13.6
+All gestures works perfect! 
+
+* Download latest version [acidanthera/VoodooPS2](https://github.com/acidanthera/VoodooPS2/releases)
+* Then download [VoodooInput](https://github.com/acidanthera/VoodooInput/releases)
+* Once it's finished downloading, place it in /EFI/Clover/kexts/other/
+* Restart your PC
 
 # Troubleshooting
 If you have any issues or question about your installation or you're coming from anotehr MSI laptop, feel free to open a new issue and I will be happy to help. 
