@@ -366,7 +366,12 @@ Unfortunately SteelSeries did not create a driver to control RGB keyboard on mac
 The app is [SSKeyboardHue](https://github.com/ErrorErrorError/SSKeyboardHue). 
 
 ### Multi-Gesture touchpad support
-Coming soon...
+Tested on Catalina 10.15.3
+All gestures works perfect! 
+
+* Download latest version [alexandred/VoodooI2C](https://github.com/alexandred/VoodooI2C/releases)
+* Once it's finished extracting, copy VoodooI2C.kext and VoodooI2CHID.kext  to /EFI/CLOVER/kexts/other
+* Restart your PC
 
 # Troubleshooting
 If you have any issues or question about your installation or you're coming from anotehr MSI laptop, feel free to open a new issue and I will be happy to help. 
