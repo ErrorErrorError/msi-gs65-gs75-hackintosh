@@ -1,3 +1,6 @@
+# I WILL NOT SUPPORT THIS REPO ANYMORE SINCE I MOVED TO OPENCORE. YOU CAN CHECK MY OPENCORE EFI DEVELOPMENT [HERE](https://github.com/ErrorErrorError/msi-gs65-8se-opencore-macos).
+Will leave this as archived since it still has some useful information but I would recommend using OpenCore for your Hackintosh builds.
+
 # MSI GS65 8SE Hackintosh Guide
 
 Hi! This is a guide on how to install macOS on your MSI GS65. I will specifically show how to install on an MSI with Coffeelake series chipset, eg. 8750H, but if any other MSI owners have issues with their hack feel free to create an issue for any help.
